@@ -1,0 +1,5 @@
+FROM golang:1.21.3
+
+WORKDIR /go
+
+RUN go install github.com/beego/bee/v2@latest

@@ -1,0 +1,19 @@
+networks:
+  docker:
+    ipam:
+      config:
+        - subnet: 192.19.0.0/24
+
+services:
+  go:
+    build:
+      context: .
+      dockerfile: GoDockerfile
+    ports:
+      - 8099:8099
+    container_name: fyoukuapi-go
+    volumes:
+      - /docker/go-study/pkg:/go/pkg
+      - /docker/go-study/src/fyoukuapi:/go/src/fyoukuapi
+    working_dir: /go/src/fyoukuapi
+    command: bee run
