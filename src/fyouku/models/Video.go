@@ -253,10 +253,9 @@ type Advert struct {
 }
 
 type AdvertApiData struct {
-	Code  int
-	Msg   string
-	Items []Advert
-	Count string
+	Code int
+	Msg  string
+	Data []Advert
 }
 
 func GetChannelAdvert(channelId int) []Advert {
@@ -272,7 +271,7 @@ func GetChannelAdvert(channelId int) []Advert {
 	err = json.Unmarshal([]byte(str), &stb)
 
 	if stb.Code == 0 {
-		info = stb.Items
+		info = stb.Data
 	}
 
 	return info

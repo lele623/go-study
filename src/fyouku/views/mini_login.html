@@ -92,9 +92,9 @@
           dataType: 'json',
           success: function(response) {
               if (response.code == 0) {
-				localStorage.setItem("uid", response.items.uid);
-				localStorage.setItem("username", response.items.username);
-				localStorage.setItem("userico", '/static/data/user/zhja.png');
+				localStorage.setItem("uid", response.data.id);
+				localStorage.setItem("username", response.data.name);
+				localStorage.setItem("userico", response.data.avatar==="" ? '/static/data/user/zhja.png':response.data.avatar);
 				setTimeout(function(){ top.location.href = "/"; }, 1000);
                 return false;
               } else {

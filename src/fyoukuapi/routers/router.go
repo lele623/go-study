@@ -29,4 +29,8 @@ func init() {
 	//web.AddNamespace(ns)
 
 	web.Router("/user/register", &controllers.UserController{}, "put:UserRegister")
+	web.Router("/user/login", &controllers.UserController{}, "get:UserLogin")
+
+	web.Router("/channel/advert", &controllers.VideoController{}, "get:ChannelAdvert")
+	web.Router("/channel/hot", &controllers.VideoController{}, "get:ChannelHotList")
 }
