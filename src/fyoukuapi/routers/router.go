@@ -33,4 +33,7 @@ func init() {
 
 	web.Router("/channel/advert", &controllers.VideoController{}, "get:ChannelAdvert")
 	web.Router("/channel/hot", &controllers.VideoController{}, "get:ChannelHotList")
+	web.Router("/channel/recommend/region", &controllers.VideoController{}, "get:ChannelRegionRecommendList")
+	web.Router("/channel/recommend/type", &controllers.VideoController{}, "get:ChannelTypeRecommendList")
+	web.Router("/channel/video", &controllers.VideoController{}, "get:ChannelVideo")
 }

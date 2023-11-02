@@ -32,11 +32,9 @@ func GetChannelAdvertById(channelId int) ([]Advert, bool) {
 		advert []Advert
 	)
 
-	query := orm.NewOrm().QueryTable("advert")
-	query = query.Filter("ChannelId", channelId)
-	query = query.Filter("Status", advertStatusOn)
-	err := query.One(&advert)
-	if err != nil {
+	sql := "select * from advert where channel_id = ? and status = ? limit 1"
+	num, _ := orm.NewOrm().Raw(sql, channelId, advertStatusOn).QueryRows(&advert)
+	if num == 0 {
 		return advert, false
 	}
 	return advert, true

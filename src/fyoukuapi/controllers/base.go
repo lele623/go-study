@@ -3,6 +3,7 @@ package controllers
 import (
 	"compress/gzip"
 	"encoding/json"
+	"fyoukuapi/models"
 	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 	"io"
@@ -40,4 +41,27 @@ func (this *BaseController) JsonResult(code int, msg string, data ...interface{}
 		io.WriteString(this.Ctx.ResponseWriter, string(returnJSON))
 	}
 	this.StopRun()
+}
+
+// 获取频道下的地区
+func (this *BaseController) ChannelRegion() {
+	var (
+		channelId int
+	)
+
+	channelId, _ = this.GetInt("channelId", 0)
+	if channelId == 0 {
+		this.JsonResult(1, "必须指定频道")
+	}
+	channelType, res := models.GetChannelRegion(channelId)
+	if !res {
+		this.JsonResult(1, "没有相关内容")
+	}
+	this.JsonResult(0, "查询成功", channelType)
+
+}
+
+// 获取频道类型
+func (this *BaseController) ChannelType() {
+
 }

@@ -10,8 +10,8 @@ type Video struct {
 	SubTitle           string
 	Status             int
 	AddTime            int64
-	img                string
-	img1               string
+	Img                string
+	Img1               string
 	ChannelId          int
 	TypeId             int
 	RegionId           int
@@ -38,18 +38,88 @@ func init() {
 }
 
 // 通过频道ID获取热播列表
-func GetChannelHotListById(channelId int, limit int) ([]Video, bool) {
+func GetChannelHotListById(channelId int, page int, limit int) ([]Video, bool) {
 	var (
 		video []Video
 	)
 
-	query := orm.NewOrm().QueryTable("video")
-	query = query.Filter("ChannelId", channelId)
-	query = query.Filter("IsHot", isHotOn)
-	query = query.Filter("Status", statusOn)
-	query = query.Limit(limit)
-	_, err := query.All(&video)
-	if err != nil {
+	sql := "select * from video where channel_id = ? and is_hot = ? and status = ? order by episodes_update_time desc limit ?,?"
+	num, _ := orm.NewOrm().Raw(sql, channelId, isHotOn, statusOn, page, limit).QueryRows(&video)
+	if num == 0 {
+		return video, false
+	}
+	return video, true
+}
+
+func GetChannelIdRegionRecommendList(channelId int, regionId int, page int, limit int) ([]Video, bool) {
+	var (
+		video []Video
+	)
+
+	sql := "select * from video where channel_id = ? and region_id = ? order by episodes_update_time desc limit ?,?"
+	num, _ := orm.NewOrm().Raw(sql, channelId, regionId, page, limit).QueryRows(&video)
+	if num == 0 {
+		return video, false
+	}
+	return video, true
+}
+
+func GetChannelTypeRecommendList(channelId int, typeId int, page int, limit int) ([]Video, bool) {
+	var (
+		video []Video
+	)
+
+	sql := "select * from video where channel_id = ? and type_id = ? order by episodes_update_time desc limit ?,?"
+	num, _ := orm.NewOrm().Raw(sql, channelId, typeId, page, limit).QueryRows(&video)
+	if num == 0 {
+		return video, false
+	}
+	return video, true
+}
+
+func GetChannelVideo(condition map[string]interface{}) ([]Video, bool) {
+	var (
+		video []Video
+		args  []interface{}
+	)
+
+	sql := "select * from video where channel_id = ? and status = 1"
+	args = append(args, condition["channelId"])
+	for i, v := range condition {
+		if v == "" || v == 0 {
+			continue
+		}
+		switch i {
+		case "region_id":
+			sql += " and region_id = ?"
+			args = append(args, v)
+		case "typeId":
+			sql += " and type_id = ?"
+			args = append(args, v)
+		case "end":
+			if condition["end"] == "n" {
+				v = 0
+			}
+			if condition["end"] == "y" {
+				v = 1
+			}
+			sql += " and is_end = ?"
+			args = append(args, v)
+		}
+	}
+
+	if condition["sort"] != "" {
+		sql += " order by ? desc"
+		args = append(args, condition["sort"])
+	} else {
+		sql += " order by add_time desc"
+	}
+
+	sql += " limit ?,?"
+	args = append(args, condition["page"])
+	args = append(args, condition["limit"])
+	num, _ := orm.NewOrm().Raw(sql, args...).QueryRows(&video)
+	if num == 0 {
 		return video, false
 	}
 	return video, true

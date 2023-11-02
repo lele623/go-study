@@ -2,8 +2,9 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"github.com/beego/beego/v2/client/orm"
-	"time"
+	"github.com/beego/beego/v2/core/logs"
 )
 
 type User struct {
@@ -21,42 +22,55 @@ func init() {
 }
 
 // 保存用户信息
-func UserSave(mobile string, password string) (User, error) {
-	query := orm.NewOrm()
-	user := User{Name: "", Password: password, Mobile: mobile, Status: 1, AddTime: time.Now().Unix()}
-	err := query.Read(&user, "Mobile")
-	if err == nil {
-		return User{}, errors.New("手机号已被使用")
+func UserSave(mobile string, password string) ([]User, error) {
+	var (
+		user []User
+	)
+
+	num, _ := orm.NewOrm().Raw("select * from user where mobile = ? limit 1", mobile).QueryRows(&user)
+	if num != 0 {
+		return user, errors.New("手机号已被使用")
 	}
-	_, err = query.Insert(&user)
+
+	_, err := orm.NewOrm().Raw("insert into user (mobile,password) values (?,?)", mobile, password).Exec()
 	if err != nil {
-		return User{}, errors.New("内部异常")
+		logs.Error(err)
+		return user, errors.New("内部异常")
 	}
-	return User{}, nil
+
+	return user, nil
 }
 
 // 获取用户信息
-func GetUserinfo(condition map[string]interface{}) (User, bool) {
-	// 创建查询条件
-	query := orm.NewOrm().QueryTable("user")
+func GetUserinfo(condition map[string]interface{}) ([]User, bool) {
+	var (
+		users []User
+		args  []interface{}
+	)
 
-	if condition["id"] != nil {
-		query = query.Filter("Id", condition["id"])
-	}
-	if condition["name"] != nil {
-		query = query.Filter("Name", condition["name"])
-	}
-	if condition["mobile"] != nil {
-		query = query.Filter("Mobile", condition["mobile"])
-	}
-	if condition["password"] != nil {
-		query = query.Filter("Password", condition["password"])
+	sql := "SELECT * FROM user WHERE 1 = 1"
+	for i, v := range condition {
+		if v == "" {
+			continue
+		}
+		switch i {
+		case "id":
+			sql += " AND id = ?"
+		case "name":
+			sql += " AND name = ?"
+		case "mobile":
+			sql += " AND mobile = ?"
+		case "password":
+			sql += " AND password = ?"
+		}
+		args = append(args, v)
 	}
 
-	user := User{}
-	err := query.One(&user)
-	if err != nil {
-		return user, false
+	num, _ := orm.NewOrm().Raw(sql, args...).QueryRows(&users)
+	if num == 0 {
+		return users, false
 	}
-	return user, true
+
+	fmt.Println(num)
+	return users, true
 }

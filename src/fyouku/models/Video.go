@@ -24,6 +24,7 @@ type VideoApiData struct {
 	Code  int
 	Msg   string
 	Items []Video
+	Data  []Video
 	Count int
 }
 
@@ -81,7 +82,7 @@ func GetChannelHotList(channelId int) []Video {
 	err = json.Unmarshal([]byte(str), &stb)
 
 	if stb.Code == 0 {
-		info = stb.Items
+		info = stb.Data
 	}
 
 	return info
@@ -100,7 +101,7 @@ func GetChannelTypeRecommend(channelId int, typeId int) []Video {
 	err = json.Unmarshal([]byte(str), &stb)
 
 	if stb.Code == 0 {
-		info = stb.Items
+		info = stb.Data
 	}
 
 	return info
@@ -119,7 +120,7 @@ func GetChannelRegionRecommend(channelId int, regionId int) []Video {
 	err = json.Unmarshal([]byte(str), &stb)
 
 	if stb.Code == 0 {
-		info = stb.Items
+		info = stb.Data
 	}
 
 	return info
@@ -145,8 +146,8 @@ func GetChannelVideoList(channelId int, regionId int, typeId int, end string, so
 	//获取数据条数和起始位置
 	limit := 12
 	var offset = (page - 1) * limit
-	url += "&offset=" + strconv.Itoa(offset) + "&limit=" + strconv.Itoa(limit)
-	//fmt.Println(url)
+	url += "&page=" + strconv.Itoa(offset) + "&limit=" + strconv.Itoa(limit)
+	fmt.Println(url)
 	req := httplib.Get(url)
 	str, err := req.String()
 	if err != nil {
@@ -157,7 +158,7 @@ func GetChannelVideoList(channelId int, regionId int, typeId int, end string, so
 	err = json.Unmarshal([]byte(str), &stb)
 
 	if stb.Code == 0 {
-		info = stb.Items
+		info = stb.Data
 		countString := strconv.Itoa(stb.Count)
 		count, _ = strconv.ParseInt(countString, 10, 64)
 	}

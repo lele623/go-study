@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"fyoukuapi/models"
 )
 
@@ -36,33 +37,24 @@ func (this *UserController) UserRegister() {
 // 用户登录
 func (this *UserController) UserLogin() {
 	var (
-		mobile   string
-		password string
-		err      error
+		err error
 	)
 
-	mobile = this.GetString("mobile")
-	password = this.GetString("password")
+	condition := make(map[string]interface{})
+	condition["mobile"] = this.GetString("mobile", "")
+	condition["password"] = this.GetString("password", "")
 
-	err = CheckMobile(mobile)
+	err = CheckMobile(fmt.Sprint(condition["mobile"]))
 	if err != nil {
 		this.JsonResult(1, err.Error())
 	}
-	if password == "" {
+	if condition["password"] == "" {
 		this.JsonResult(1, "密码不能为空")
 	}
 
-	condition := make(map[string]interface{})
-	condition["mobile"] = mobile
-	condition["password"] = Md5V(password)
 	user, res := models.GetUserinfo(condition)
 	if !res {
 		this.JsonResult(1, "账号或密码错误")
 	}
-	data := make(map[string]interface{})
-	data["id"] = user.Id
-	data["name"] = user.Name
-	data["mobile"] = user.Mobile
-	data["avatar"] = user.Avatar
-	this.JsonResult(0, "登录成功", data)
+	this.JsonResult(0, "登录成功", user)
 }
