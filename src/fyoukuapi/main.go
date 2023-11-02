@@ -16,7 +16,7 @@ func main() {
 	defaultdb, _ := web.AppConfig.String("defaultdb")
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	orm.RegisterDataBase("default", "mysql", defaultdb)
-
+	orm.Debug = true
 	if web.BConfig.RunMode == "dev" {
 		web.BConfig.WebConfig.DirectoryIndex = true
 		web.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"

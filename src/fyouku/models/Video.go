@@ -48,7 +48,7 @@ type VideoInfo struct {
 type VideoInfoData struct {
 	Code  int
 	Msg   string
-	Items VideoInfo
+	Data  VideoInfo
 	Count int
 }
 
@@ -64,7 +64,7 @@ type Episodes struct {
 type EpisodesApiData struct {
 	Code  int
 	Msg   string
-	Items []Episodes
+	Data  []Episodes
 	Count int
 }
 
@@ -218,7 +218,7 @@ func GetVideoInfo(videoId int) VideoInfo {
 
 	var videoInfo VideoInfo
 	if stb.Code == 0 {
-		videoInfo = stb.Items
+		videoInfo = stb.Data
 	}
 
 	return videoInfo
@@ -237,7 +237,7 @@ func GetVideoEpisodesList(videoId int) []Episodes {
 
 	var episodesData []Episodes
 	if stb.Code == 0 {
-		episodesData = stb.Items
+		episodesData = stb.Data
 	}
 
 	return episodesData

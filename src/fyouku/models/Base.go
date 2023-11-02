@@ -17,7 +17,7 @@ type Base struct {
 type BaseApiData struct {
 	Code  int
 	Msg   string
-	Items []Base
+	Data  []Base
 	Count string
 }
 
@@ -34,7 +34,7 @@ func GetChannelRegion(channelId int) []Base {
 	err = json.Unmarshal([]byte(str), &stb)
 
 	if stb.Code == 0 {
-		info = stb.Items
+		info = stb.Data
 	}
 
 	return info
@@ -53,7 +53,7 @@ func GetChannelType(channelId int) []Base {
 	err = json.Unmarshal([]byte(str), &stb)
 
 	if stb.Code == 0 {
-		info = stb.Items
+		info = stb.Data
 	}
 
 	return info

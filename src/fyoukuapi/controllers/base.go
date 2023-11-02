@@ -45,9 +45,7 @@ func (this *BaseController) JsonResult(code int, msg string, data ...interface{}
 
 // 获取频道下的地区
 func (this *BaseController) ChannelRegion() {
-	var (
-		channelId int
-	)
+	var channelId int
 
 	channelId, _ = this.GetInt("channelId", 0)
 	if channelId == 0 {
@@ -58,10 +56,19 @@ func (this *BaseController) ChannelRegion() {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "查询成功", channelType)
-
 }
 
 // 获取频道类型
 func (this *BaseController) ChannelType() {
+	var channelId int
 
+	channelId, _ = this.GetInt("channelId", 0)
+	if channelId == 0 {
+		this.JsonResult(1, "必须指定频道")
+	}
+	channelType, res := models.GetChannelType(channelId)
+	if !res {
+		this.JsonResult(1, "没有相关内容")
+	}
+	this.JsonResult(0, "查询成功", channelType)
 }

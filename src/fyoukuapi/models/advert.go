@@ -22,15 +22,9 @@ const (
 	advertStatusOff = 0 //关闭
 )
 
-func init() {
-	orm.RegisterModel(new(Advert))
-}
-
 // 通过频道ID获取频道广告
 func GetChannelAdvertById(channelId int) ([]Advert, bool) {
-	var (
-		advert []Advert
-	)
+	var advert []Advert
 
 	sql := "select * from advert where channel_id = ? and status = ? limit 1"
 	num, _ := orm.NewOrm().Raw(sql, channelId, advertStatusOn).QueryRows(&advert)

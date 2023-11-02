@@ -57,7 +57,7 @@ func (this *MainController) Channel() {
 	//排序
 	sort := this.GetString("sort")
 	if sort == "" {
-		sort = "episodesUpdateTime"
+		sort = "episodes_update_time"
 	}
 	this.Data["sort"] = sort
 	//获得地区列表
@@ -85,7 +85,7 @@ func (this *MainController) ChannelVideoData() {
 	//排序
 	sort := this.GetString("sort")
 	if sort == "" {
-		sort = "episodesUpdateTime"
+		sort = "episodes_update_time"
 	}
 	//页数
 	page, _ := this.GetInt("page")

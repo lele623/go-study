@@ -17,15 +17,9 @@ type User struct {
 	Avatar   string
 }
 
-func init() {
-	orm.RegisterModel(new(User))
-}
-
 // 保存用户信息
 func UserSave(mobile string, password string) ([]User, error) {
-	var (
-		user []User
-	)
+	var user []User
 
 	num, _ := orm.NewOrm().Raw("select * from user where mobile = ? limit 1", mobile).QueryRows(&user)
 	if num != 0 {
