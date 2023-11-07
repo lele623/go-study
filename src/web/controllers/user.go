@@ -21,7 +21,7 @@ func (c *UserController) UserInfo() {
 	user, err = models.GetUserInfoById(id)
 	msg = "查询失败"
 	if err == nil {
-		msg = "查询成功,name:" + user.Name
+		msg = "操作成功,name:" + user.Name
 	}
 	c.Ctx.WriteString(msg)
 }

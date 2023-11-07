@@ -19,7 +19,7 @@ type ChannelType struct {
 	Sort      int
 }
 
-// 获取地区
+// 获取频道下的地区
 func GetChannelRegion(channelId int) ([]ChannelRegion, bool) {
 	var channelType []ChannelRegion
 
@@ -31,7 +31,7 @@ func GetChannelRegion(channelId int) ([]ChannelRegion, bool) {
 	return channelType, true
 }
 
-// 获取类型
+// 获取频道下的类型
 func GetChannelType(channelId int) ([]ChannelType, bool) {
 	var channelType []ChannelType
 

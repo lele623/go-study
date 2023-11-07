@@ -55,7 +55,7 @@ func (this *BaseController) ChannelRegion() {
 	if !res {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "查询成功", channelType)
+	this.JsonResult(0, "操作成功", channelType)
 }
 
 // 获取频道类型
@@ -70,5 +70,5 @@ func (this *BaseController) ChannelType() {
 	if !res {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "查询成功", channelType)
+	this.JsonResult(0, "操作成功", channelType)
 }

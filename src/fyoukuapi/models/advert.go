@@ -23,13 +23,10 @@ const (
 )
 
 // 通过频道ID获取频道广告
-func GetChannelAdvertById(channelId int) ([]Advert, bool) {
+func GetChannelAdvertById(channelId int) ([]Advert, int64) {
 	var advert []Advert
 
 	sql := "select * from advert where channel_id = ? and status = ? limit 1"
 	num, _ := orm.NewOrm().Raw(sql, channelId, advertStatusOn).QueryRows(&advert)
-	if num == 0 {
-		return advert, false
-	}
-	return advert, true
+	return advert, num
 }

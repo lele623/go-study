@@ -41,4 +41,7 @@ func init() {
 
 	web.Router("/video/info", &controllers.VideoController{}, "get:VideoInfo")
 	web.Router("/video/episodes/list", &controllers.VideoController{}, "get:VideoEpisodesList")
+
+	web.Router("/comment/list", &controllers.CommentController{}, "get:CommentList")
+	web.Router("/comment/save", &controllers.CommentController{}, "get:CommentSave")
 }

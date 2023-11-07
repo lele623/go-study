@@ -20,9 +20,7 @@ func GetCommentList(episodesId int, page int) string {
 	}
 	var offset = (page - 1) * limit
 	url += "&offset=" + strconv.Itoa(offset) + "&limit=" + strconv.Itoa(limit)
-	fmt.Println(url)
 	req := utils.HttpGetApi(url)
-	//fmt.Println(req)
 
 	return req
 }

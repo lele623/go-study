@@ -36,24 +36,21 @@ func (this *UserController) UserRegister() {
 
 // 用户登录
 func (this *UserController) UserLogin() {
-	var (
-		err error
-	)
+	param := make(map[string]interface{})
+	param["mobile"] = this.GetString("mobile", "")
+	param["password"] = this.GetString("password", "")
 
-	condition := make(map[string]interface{})
-	condition["mobile"] = this.GetString("mobile", "")
-	condition["password"] = this.GetString("password", "")
-
-	err = CheckMobile(fmt.Sprint(condition["mobile"]))
+	err := CheckMobile(fmt.Sprint(param["mobile"]))
 	if err != nil {
 		this.JsonResult(1, err.Error())
 	}
-	if condition["password"] == "" {
+	if param["password"] == "" {
 		this.JsonResult(1, "密码不能为空")
 	}
+	param["password"] = Md5V(fmt.Sprint(param["password"]))
 
-	user, res := models.GetUserinfo(condition)
-	if !res {
+	user, num := models.GetUserinfo(param)
+	if num == 0 {
 		this.JsonResult(1, "账号或密码错误")
 	}
 	this.JsonResult(0, "登录成功", user)

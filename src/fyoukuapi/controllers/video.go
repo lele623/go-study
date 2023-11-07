@@ -17,14 +17,14 @@ func (this *VideoController) ChannelAdvert() {
 	if channelId == 0 {
 		this.JsonResult(1, "必须指定频道")
 	}
-	advert, res := models.GetChannelAdvertById(channelId)
-	if !res {
+	advert, num := models.GetChannelAdvertById(channelId)
+	if num == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "查询成功", advert)
+	this.JsonResult(0, "操作成功", advert)
 }
 
-// 获取热播列表
+// 根据频道ID获取正在热播视频
 func (this *VideoController) ChannelHotList() {
 	var (
 		channelId int
@@ -38,14 +38,14 @@ func (this *VideoController) ChannelHotList() {
 	if channelId == 0 {
 		this.JsonResult(1, "必须指定频道")
 	}
-	advert, res := models.GetChannelHotListById(channelId, page, limit)
-	if !res {
+	advert, num := models.GetChannelHotListById(channelId, page, limit)
+	if num == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "查询成功", advert)
+	this.JsonResult(0, "操作成功", advert)
 }
 
-// 按照地区获取推荐
+// 根据频道下的地区ID获取推荐视频
 func (this *VideoController) ChannelRegionRecommendList() {
 	var (
 		channelId int
@@ -65,11 +65,11 @@ func (this *VideoController) ChannelRegionRecommendList() {
 	page, _ = this.GetInt("page", 0)
 	limit, _ = this.GetInt("limit", 9)
 
-	video, res := models.GetChannelIdRegionRecommendList(channelId, regionId, page, limit)
-	if !res {
+	video, num := models.GetChannelIdRegionRecommendList(channelId, regionId, page, limit)
+	if num == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "查询成功", video)
+	this.JsonResult(0, "操作成功", video)
 }
 
 // 按照类型获取推荐
@@ -92,11 +92,11 @@ func (this *VideoController) ChannelTypeRecommendList() {
 	page, _ = this.GetInt("page", 0)
 	limit, _ = this.GetInt("limit", 9)
 
-	video, res := models.GetChannelTypeRecommendList(channelId, typeId, page, limit)
-	if !res {
+	video, num := models.GetChannelTypeRecommendList(channelId, typeId, page, limit)
+	if num == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "查询成功", video)
+	this.JsonResult(0, "操作成功", video)
 }
 
 // 视频列表
@@ -114,11 +114,11 @@ func (this *VideoController) ChannelVideo() {
 	param["limit"], _ = this.GetInt("limit", 2)
 
 	fmt.Println(param)
-	video, res := models.GetChannelVideo(param)
-	if !res {
+	video, num := models.GetChannelVideo(param)
+	if num == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "查询成功", video)
+	this.JsonResult(0, "操作成功", video)
 }
 
 // 视频详情
@@ -129,11 +129,11 @@ func (this *VideoController) VideoInfo() {
 	if videoId == 0 {
 		this.JsonResult(1, "必须指定视频ID")
 	}
-	video, res := models.GetVideoInfo(videoId)
-	if !res {
+	video, num := models.GetVideoInfo(videoId)
+	if num == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "查询成功", video)
+	this.JsonResult(0, "操作成功", video)
 }
 
 // 视频剧集列表
@@ -144,9 +144,9 @@ func (this *VideoController) VideoEpisodesList() {
 	if videoId == 0 {
 		this.JsonResult(1, "必须指定视频ID")
 	}
-	videoEpisodes, res := models.GetVideoEpisodesList(videoId)
-	if !res {
+	videoEpisodes, num := models.GetVideoEpisodesList(videoId)
+	if num == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "查询成功", videoEpisodes)
+	this.JsonResult(0, "操作成功", videoEpisodes)
 }

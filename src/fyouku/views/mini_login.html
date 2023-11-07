@@ -94,7 +94,9 @@
               if (response.code == 0) {
 				localStorage.setItem("uid", response.data.id);
 				localStorage.setItem("username", response.data.name);
-				localStorage.setItem("userico", response.data.avatar==="" ? '/static/data/user/zhja.png':response.data.avatar);
+                console.info(Boolean(response.data.avatar))
+				localStorage.setItem("userico", Boolean(response.data.avatar)  ?  response.data.avatar :'/static/data/user/zhja.png');
+                top.layer.msg(response.msg, {icon: 1});
 				setTimeout(function(){ top.location.href = "/"; }, 1000);
                 return false;
               } else {

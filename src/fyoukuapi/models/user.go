@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/logs"
 )
@@ -31,40 +30,27 @@ func UserSave(mobile string, password string) ([]User, error) {
 		logs.Error(err)
 		return user, errors.New("内部异常")
 	}
-
 	return user, nil
 }
 
 // 获取用户信息
-func GetUserinfo(condition map[string]interface{}) ([]User, bool) {
+func GetUserinfo(param map[string]interface{}) ([]User, int64) {
 	var (
-		users []User
-		args  []interface{}
+		user []User
+		args []interface{}
 	)
 
 	sql := "SELECT * FROM user WHERE 1 = 1"
-	for i, v := range condition {
-		if v == "" {
-			continue
-		}
-		switch i {
-		case "id":
-			sql += " AND id = ?"
-		case "name":
-			sql += " AND name = ?"
-		case "mobile":
-			sql += " AND mobile = ?"
-		case "password":
-			sql += " AND password = ?"
-		}
-		args = append(args, v)
+
+	if param["mobile"] != "" {
+		sql += " AND mobile = ?"
+		args = append(args, param["mobile"])
+	}
+	if param["password"] != "" {
+		sql += " AND password = ?"
+		args = append(args, param["password"])
 	}
 
-	num, _ := orm.NewOrm().Raw(sql, args...).QueryRows(&users)
-	if num == 0 {
-		return users, false
-	}
-
-	fmt.Println(num)
-	return users, true
+	num, _ := orm.NewOrm().Raw(sql, args...).QueryRows(&user)
+	return user, num
 }
