@@ -9,24 +9,10 @@ package routers
 
 import (
 	"fyoukuapi/controllers"
-
 	"github.com/beego/beego/v2/server/web"
 )
 
 func init() {
-	//ns := web.NewNamespace("/v1",
-	//	web.NSNamespace("/object",
-	//		web.NSInclude(
-	//			&controllers.ObjectController{},
-	//		),
-	//	),
-	//	web.NSNamespace("/user",
-	//		web.NSInclude(
-	//			&controllers.UserController{},
-	//		),
-	//	),
-	//)
-	//web.AddNamespace(ns)
 
 	web.Router("/user/register", &controllers.UserController{}, "put:UserRegister")
 	web.Router("/user/login", &controllers.UserController{}, "get:UserLogin")
@@ -43,5 +29,7 @@ func init() {
 	web.Router("/video/episodes/list", &controllers.VideoController{}, "get:VideoEpisodesList")
 
 	web.Router("/comment/list", &controllers.CommentController{}, "get:CommentList")
-	web.Router("/comment/save", &controllers.CommentController{}, "get:CommentSave")
+	web.Router("/comment/save", &controllers.CommentController{}, "post:CommentSave")
+	web.Router("/comment/save", &controllers.CommentController{}, "post:CommentSave")
+
 }

@@ -27,7 +27,7 @@ func (this *UserController) UserRegister() {
 	if password == "" {
 		this.JsonResult(1, "密码不能为空")
 	}
-	_, err = models.UserSave(mobile, Md5V(password))
+	err = models.UserSave(mobile, Md5V(password))
 	if err != nil {
 		this.JsonResult(1, err.Error())
 	}
@@ -49,8 +49,11 @@ func (this *UserController) UserLogin() {
 	}
 	param["password"] = Md5V(fmt.Sprint(param["password"]))
 
-	user, num := models.GetUserinfo(param)
-	if num == 0 {
+	user, count, err := models.GetUserinfo(param)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "账号或密码错误")
 	}
 	this.JsonResult(0, "登录成功", user)

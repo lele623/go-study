@@ -1,6 +1,9 @@
 package controllers
 
-import "fyoukuapi/models"
+import (
+	"fyoukuapi/models"
+	"time"
+)
 
 type CommentController struct {
 	BaseController
@@ -21,11 +24,23 @@ func (this *CommentController) CommentList() {
 	page, _ = this.GetInt("page", 0)
 	limit, _ = this.GetInt("limit", 12)
 
-	comment, num := models.GetCommentList(episodesId, page, limit)
-	if num == 0 {
+	commentList, count, err := models.GetCommentList(episodesId, page, limit)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
-	this.JsonResult(0, "操作成功", comment)
+
+	for k, _ := range commentList {
+		commentList[k].AddTimeTitle = time.Unix(1587224736, 0).Format("2006-01-02 15:04:05")
+	}
+
+	data := map[string]interface{}{
+		"list":  commentList,
+		"count": count,
+	}
+	this.JsonResult(0, "操作成功", data)
 }
 
 // 保存评论
@@ -37,7 +52,7 @@ func (this *CommentController) CommentSave() {
 		content    string
 	)
 
-	uid, _ = this.GetInt("episodesId", 0)
+	uid, _ = this.GetInt("uid", 0)
 	if uid == 0 {
 		this.JsonResult(1, "请先登录")
 	}
@@ -49,12 +64,12 @@ func (this *CommentController) CommentSave() {
 	if episodesId == 0 {
 		this.JsonResult(1, "必须指定评论视频集数")
 	}
-	content = this.GetString("episodesId", "")
+	content = this.GetString("content", "")
 	if content == "" {
 		this.JsonResult(1, "必须指定评论视频集数")
 	}
 
-	comment, err := models.GetCommentSave(uid, videoId, episodesId, content)
+	comment, err := models.CommentSave(uid, videoId, episodesId, content)
 	if err != nil {
 		this.JsonResult(1, err.Error())
 	}

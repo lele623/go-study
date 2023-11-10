@@ -665,11 +665,12 @@ function getCommentData(episodesId, page){
     async: false,
     dataType: 'json',
     success: function(response) {
+        console.info(response)
       if (response.code == 0) {
         if(page == 1) {
-          $("#commentCount").html(response.count);
+          $("#commentCount").html(response.data.count);
         }
-        $.each(response.items,function(i,j){
+        $.each(response.data.list,function(i,j){
           var stamp = '';
           if(j.stamp == 1){
             stamp = '<span class="iconfont iconrepingx default-tag"></span>';
@@ -677,7 +678,7 @@ function getCommentData(episodesId, page){
           if(j.stamp == 2){
             stamp = '<span class="iconfont icongonggao default-tag"></span>';
           }
-          $("#commentList").append('<div class="comment-list-item"><div class="comment-list-header"><div class="comment-list-header-head-ico" style="background-image: url(&quot;'+j.userinfo.avatar+'?x-oss-process=image/resize,m_fill,h_50,w_50,limit_0&quot;);"></div><div class="comment-list-header-info"><div class="comment-list-header-name"><a href="javascript:;" class="nickName">'+j.userinfo.name+'</a></div><div class="comment-list-header-time">'+j.addTimeTitle+'</div></div></div><div class="comment-list-body"><div class="comment-list-body-content"><div class="comment-list-content-text">'+stamp+'<span><span>'+j.content+'</span></span></div></div><div class="img-area"></div><div class="comment-list-body-interaction"><a href="javascript:;" class="interaction-awsl"><div class="awsl-ico"></div><span class="interaction-text awsl-text">'+j.praiseCount+'</span></a></div><div class="comment-reply-input"></div></div></div>');
+          $("#commentList").append('<div class="comment-list-item"><div class="comment-list-header"><div class="comment-list-header-head-ico" style="background-image: url(&quot;'+j.avatar+'?x-oss-process=image/resize,m_fill,h_50,w_50,limit_0&quot;);"></div><div class="comment-list-header-info"><div class="comment-list-header-name"><a href="javascript:;" class="nickName">'+j.name+'</a></div><div class="comment-list-header-time">'+j.addTimeTitle+'</div></div></div><div class="comment-list-body"><div class="comment-list-body-content"><div class="comment-list-content-text">'+stamp+'<span><span>'+j.content+'</span></span></div></div><div class="img-area"></div><div class="comment-list-body-interaction"><a href="javascript:;" class="interaction-awsl"><div class="awsl-ico"></div><span class="interaction-text awsl-text">'+j.praiseCount+'</span></a></div><div class="comment-reply-input"></div></div></div>');
         });
         $("#commentPage").val(parseInt(page)+1);
       }

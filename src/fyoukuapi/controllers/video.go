@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"fyoukuapi/models"
 )
 
@@ -17,8 +16,11 @@ func (this *VideoController) ChannelAdvert() {
 	if channelId == 0 {
 		this.JsonResult(1, "必须指定频道")
 	}
-	advert, num := models.GetChannelAdvertById(channelId)
-	if num == 0 {
+	advert, count, err := models.GetChannelAdvertById(channelId)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "操作成功", advert)
@@ -38,8 +40,11 @@ func (this *VideoController) ChannelHotList() {
 	if channelId == 0 {
 		this.JsonResult(1, "必须指定频道")
 	}
-	advert, num := models.GetChannelHotListById(channelId, page, limit)
-	if num == 0 {
+	advert, count, err := models.GetChannelHotListById(channelId, page, limit)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "操作成功", advert)
@@ -65,8 +70,11 @@ func (this *VideoController) ChannelRegionRecommendList() {
 	page, _ = this.GetInt("page", 0)
 	limit, _ = this.GetInt("limit", 9)
 
-	video, num := models.GetChannelIdRegionRecommendList(channelId, regionId, page, limit)
-	if num == 0 {
+	video, count, err := models.GetChannelIdRegionRecommendList(channelId, regionId, page, limit)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "操作成功", video)
@@ -92,8 +100,11 @@ func (this *VideoController) ChannelTypeRecommendList() {
 	page, _ = this.GetInt("page", 0)
 	limit, _ = this.GetInt("limit", 9)
 
-	video, num := models.GetChannelTypeRecommendList(channelId, typeId, page, limit)
-	if num == 0 {
+	video, count, err := models.GetChannelTypeRecommendList(channelId, typeId, page, limit)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "操作成功", video)
@@ -113,9 +124,11 @@ func (this *VideoController) ChannelVideo() {
 	param["page"], _ = this.GetInt("page", 0)
 	param["limit"], _ = this.GetInt("limit", 2)
 
-	fmt.Println(param)
-	video, num := models.GetChannelVideo(param)
-	if num == 0 {
+	video, count, err := models.GetChannelVideo(param)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "操作成功", video)
@@ -129,8 +142,11 @@ func (this *VideoController) VideoInfo() {
 	if videoId == 0 {
 		this.JsonResult(1, "必须指定视频ID")
 	}
-	video, num := models.GetVideoInfo(videoId)
-	if num == 0 {
+	video, count, err := models.GetVideoInfo(videoId)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "操作成功", video)
@@ -144,8 +160,11 @@ func (this *VideoController) VideoEpisodesList() {
 	if videoId == 0 {
 		this.JsonResult(1, "必须指定视频ID")
 	}
-	videoEpisodes, num := models.GetVideoEpisodesList(videoId)
-	if num == 0 {
+	videoEpisodes, count, err := models.GetVideoEpisodesList(videoId)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "操作成功", videoEpisodes)

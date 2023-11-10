@@ -3,10 +3,9 @@ package models
 import (
 	"fmt"
 	"fyouku/utils"
-	"strconv"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/httplib"
+	"strconv"
 )
 
 // 获取评论信息
@@ -19,7 +18,7 @@ func GetCommentList(episodesId int, page int) string {
 		page = 1
 	}
 	var offset = (page - 1) * limit
-	url += "&offset=" + strconv.Itoa(offset) + "&limit=" + strconv.Itoa(limit)
+	url += "&page=" + strconv.Itoa(offset) + "&limit=" + strconv.Itoa(limit)
 	req := utils.HttpGetApi(url)
 
 	return req

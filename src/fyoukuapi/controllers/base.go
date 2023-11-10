@@ -51,8 +51,11 @@ func (this *BaseController) ChannelRegion() {
 	if channelId == 0 {
 		this.JsonResult(1, "必须指定频道")
 	}
-	channelType, res := models.GetChannelRegion(channelId)
-	if !res {
+	channelType, count, err := models.GetChannelRegion(channelId)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "操作成功", channelType)
@@ -66,8 +69,11 @@ func (this *BaseController) ChannelType() {
 	if channelId == 0 {
 		this.JsonResult(1, "必须指定频道")
 	}
-	channelType, res := models.GetChannelType(channelId)
-	if !res {
+	channelType, count, err := models.GetChannelType(channelId)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if count == 0 {
 		this.JsonResult(1, "没有相关内容")
 	}
 	this.JsonResult(0, "操作成功", channelType)
