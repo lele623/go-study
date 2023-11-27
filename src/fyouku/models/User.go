@@ -41,9 +41,9 @@ func UserSave(mobile string, password string) string {
 	return str
 }
 
-// 保存用户
+// 发送消息
 func SendMessageDo(uids string, content string) string {
-	req := httplib.Post(beego.AppConfig.String("apiurl") + "/send/message")
+	req := httplib.Post(beego.AppConfig.String("apiurl") + "/user/send/message")
 	req.Param("uids", uids)
 	req.Param("content", content)
 	str, err := req.String()

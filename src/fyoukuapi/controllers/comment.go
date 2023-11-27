@@ -33,7 +33,7 @@ func (this *CommentController) CommentList() {
 	}
 
 	for k, _ := range commentList {
-		commentList[k].AddTimeTitle = time.Unix(1587224736, 0).Format("2006-01-02 15:04:05")
+		commentList[k].AddTimeTitle = time.Unix(commentList[k].AddTime, 0).Format("2006-01-02 15:04:05")
 	}
 
 	data := map[string]interface{}{

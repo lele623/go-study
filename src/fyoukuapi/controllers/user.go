@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"fyoukuapi/models"
+	"strings"
 )
 
 type UserController struct {
@@ -57,4 +58,27 @@ func (this *UserController) UserLogin() {
 		this.JsonResult(1, "账号或密码错误")
 	}
 	this.JsonResult(0, "登录成功", user)
+}
+
+// 发送通知消息
+func (this *UserController) UserSendMessage() {
+	var (
+		uids    string
+		content string
+	)
+
+	uids = this.GetString("uids", "")
+	if uids == "" {
+		this.JsonResult(1, "接收人不能为空")
+	}
+	content = this.GetString("content", "")
+	if content == "" {
+		this.JsonResult(1, "发送内容不能为空")
+	}
+	arr := strings.Split(uids, ",")
+	err := models.UserSendMessage(arr, content)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	this.JsonResult(0, "发送成功")
 }

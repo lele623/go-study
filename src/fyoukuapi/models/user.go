@@ -17,6 +17,12 @@ type User struct {
 	Avatar   string
 }
 
+// 状态
+const (
+	messageUserStatusOn  = 1 //是
+	messageUserStatusOff = 0 //否
+)
+
 // 保存用户信息
 func UserSave(mobile string, password string) error {
 	var user []User

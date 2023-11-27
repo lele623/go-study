@@ -12,7 +12,7 @@ import (
 // 获取动漫排行榜
 func GetChannelTop(channelId int) []Video {
 	var info []Video
-	req := httplib.Get(beego.AppConfig.String("apiurl") + "/channel/top?channelId=" + strconv.Itoa(channelId))
+	req := httplib.Get(beego.AppConfig.String("apiurl") + "/video/channel/ranking?channelId=" + strconv.Itoa(channelId))
 	str, err := req.String()
 	if err != nil {
 		fmt.Println(err)
@@ -22,7 +22,7 @@ func GetChannelTop(channelId int) []Video {
 	err = json.Unmarshal([]byte(str), &stb)
 
 	if stb.Code == 0 {
-		info = stb.Items
+		info = stb.Data
 	}
 
 	return info
@@ -31,7 +31,7 @@ func GetChannelTop(channelId int) []Video {
 // 获取少女排行榜
 func GetTypeTop(typeId int) []Video {
 	var info []Video
-	req := httplib.Get(beego.AppConfig.String("apiurl") + "/type/top?typeId=" + strconv.Itoa(typeId) + "")
+	req := httplib.Get(beego.AppConfig.String("apiurl") + "/video/type/ranking?typeId=" + strconv.Itoa(typeId) + "")
 	str, err := req.String()
 	if err != nil {
 		fmt.Println(err)
@@ -41,7 +41,7 @@ func GetTypeTop(typeId int) []Video {
 	err = json.Unmarshal([]byte(str), &stb)
 
 	if stb.Code == 0 {
-		info = stb.Items
+		info = stb.Data
 	}
 
 	return info

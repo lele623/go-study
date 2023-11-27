@@ -169,3 +169,33 @@ func (this *VideoController) VideoEpisodesList() {
 	}
 	this.JsonResult(0, "操作成功", videoEpisodes)
 }
+
+// 根据频道ID获取排行榜
+func (this *VideoController) ChannelRanking() {
+	var channelId int
+
+	channelId, _ = this.GetInt("channelId", 0)
+	if channelId == 0 {
+		this.JsonResult(1, "必须指定频道")
+	}
+	video, _, err := models.GetChannelRanking(channelId)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	this.JsonResult(0, "操作成功", video)
+}
+
+// 根据类型ID获取排行榜
+func (this *VideoController) TypeRanking() {
+	var typeId int
+
+	typeId, _ = this.GetInt("typeId", 0)
+	if typeId == 0 {
+		this.JsonResult(1, "必须指定类型")
+	}
+	video, _, err := models.GetTypeRanking(typeId)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	this.JsonResult(0, "操作成功", video)
+}

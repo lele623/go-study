@@ -33,6 +33,7 @@ type VideoEpisodes struct {
 	AddTime int64
 	count   int
 	VideoId int
+	Num     int
 	PlayUrl string
 	Status  int
 	Comment int
@@ -150,4 +151,30 @@ func GetVideoEpisodesList(episodesId int) ([]VideoEpisodes, int64, error) {
 		return videoEpisodes, 0, errors.New("内部异常")
 	}
 	return videoEpisodes, count, nil
+}
+
+// 获取频道下排行榜
+func GetChannelRanking(channelId int) ([]Video, int64, error) {
+	var video []Video
+
+	sql := "select id,title,sub_title,img,img1,add_time,episodes_count,is_end from video where channel_id = ? and status = ? order by comment desc limit 10"
+	count, err := orm.NewOrm().Raw(sql, channelId, videoStatusOn).QueryRows(&video)
+	if err != nil {
+		logs.Error(err)
+		return video, 0, errors.New("内部异常")
+	}
+	return video, count, nil
+}
+
+// 获取频道下排行榜
+func GetTypeRanking(typeId int) ([]Video, int64, error) {
+	var video []Video
+
+	sql := "select id,title,sub_title,img,img1,add_time,episodes_count,is_end from video where type_id = ? and status = ? order by comment desc limit 10"
+	count, err := orm.NewOrm().Raw(sql, typeId, videoStatusOn).QueryRows(&video)
+	if err != nil {
+		logs.Error(err)
+		return video, 0, errors.New("内部异常")
+	}
+	return video, count, nil
 }
