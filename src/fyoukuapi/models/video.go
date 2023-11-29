@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/logs"
+	"time"
 )
 
 type Video struct {
@@ -177,4 +178,25 @@ func GetTypeRanking(typeId int) ([]Video, int64, error) {
 		return video, 0, errors.New("内部异常")
 	}
 	return video, count, nil
+}
+
+func VideoSave(playUrl string, title string, subTitle string, uid int, channelId int, typeId int, regionId int) error {
+	var lastInsertVideoId int64
+
+	//时间戳
+	timestamp := time.Now().Unix()
+	insertVideoSql := "insert into video (title,sub_title,add_time,img,img1,episodes_count,is_end,channel_id,status,region_id,type_id,episodes_update_time,comment,user_id) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
+	exec, err := orm.NewOrm().Raw(insertVideoSql, title, subTitle, timestamp, "", "", 1, 1, channelId, videoStatusOn, regionId, typeId, timestamp, 0, uid).Exec()
+	if err != nil {
+		logs.Error(fmt.Errorf("保存视频失败:%w", err))
+		return fmt.Errorf("内部异常")
+	}
+	lastInsertVideoId, err = exec.LastInsertId()
+	insertVideoEpisodesSql := "insert into video_episodes (title,add_time,num,video_id,play_url,status,comment) values (?,?,?,?,?,?,?)"
+	_, err = orm.NewOrm().Raw(insertVideoEpisodesSql, subTitle, timestamp, 1, lastInsertVideoId, playUrl, 1, 0).Exec()
+	if err != nil {
+		logs.Error(fmt.Errorf("保存视频详情失败:%w", err))
+		return fmt.Errorf("内部异常")
+	}
+	return nil
 }

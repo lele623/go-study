@@ -20,6 +20,8 @@ func init() {
 	web.Router("/user/login", &controllers.UserController{}, "get:UserLogin")
 	//发送消息
 	web.Router("/user/send/message", &controllers.UserController{}, "post:UserSendMessage")
+	//我的视频
+	web.Router("/user/video", &controllers.UserController{}, "get:UserVideo")
 
 	//获取频道顶部广告
 	web.Router("/channel/advert", &controllers.VideoController{}, "get:ChannelAdvert")
@@ -44,10 +46,17 @@ func init() {
 	web.Router("/video/channel/ranking", &controllers.VideoController{}, "get:ChannelRanking")
 	//类型排行榜
 	web.Router("/video/type/ranking", &controllers.VideoController{}, "get:TypeRanking")
+	//保存视频
+	web.Router("/video/save", &controllers.VideoController{}, "post:VideoSave")
 
 	//评论列表
 	web.Router("/comment/list", &controllers.CommentController{}, "get:CommentList")
 	//保存评论
 	web.Router("/comment/save", &controllers.CommentController{}, "post:CommentSave")
+
+	//websocket
+	web.Router("/barrage/ws", &controllers.BarrageController{}, "get:WsFunc")
+	//保存弹幕
+	web.Router("/barrage/save", &controllers.BarrageController{}, "post:SaveBarrage")
 
 }

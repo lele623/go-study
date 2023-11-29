@@ -199,3 +199,36 @@ func (this *VideoController) TypeRanking() {
 	}
 	this.JsonResult(0, "操作成功", video)
 }
+
+// 保存视频
+func (this *VideoController) VideoSave() {
+	var (
+		playUrl   string
+		title     string
+		subTitle  string
+		uid       int
+		channelId int
+		typeId    int
+		regionId  int
+	)
+
+	playUrl = this.GetString("playUrl", "")
+	if playUrl == "" {
+		this.JsonResult(1, "视频地址不能为空")
+	}
+	uid, _ = this.GetInt("uid", 0)
+	if uid == 0 {
+		this.JsonResult(1, "请先登录")
+	}
+	title = this.GetString("title", "")
+	subTitle = this.GetString("subTitle", "")
+	channelId, _ = this.GetInt("channelId", 0)
+	typeId, _ = this.GetInt("typeId", 0)
+	regionId, _ = this.GetInt("regionId", 0)
+
+	err := models.VideoSave(playUrl, title, subTitle, uid, channelId, typeId, regionId)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	this.JsonResult(0, "操作成功")
+}

@@ -33,12 +33,13 @@ func (this *TestController) WsFunc() {
 		goto ERR
 	}
 
+	//心跳
 	go func() {
 		for {
 			if err = conn.WriteMessage(websocket.TextMessage, []byte("Hello")); err != nil {
 				return
 			}
-			time.Sleep(1 * time.Second)
+			time.Sleep(5 * time.Second)
 		}
 	}()
 

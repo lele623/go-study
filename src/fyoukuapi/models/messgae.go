@@ -16,6 +16,7 @@ type Message struct {
 	AddTime int64
 }
 
+// 发送通知消息
 func UserSendMessage(uids []string, content string) error {
 	//事务
 	err := orm.NewOrm().DoTx(func(ctx context.Context, txOrm orm.TxOrmer) error {
@@ -33,8 +34,6 @@ func UserSendMessage(uids []string, content string) error {
 		var values []interface{}
 		currentUnixTime := time.Now().Unix()
 		for _, uid := range uids {
-			fmt.Println(uid)
-			fmt.Println("--------")
 			valueParams = append(valueParams, "(?,?,?,?)")
 			values = append(values, uid, messageId, messageUserStatusOn, currentUnixTime)
 		}

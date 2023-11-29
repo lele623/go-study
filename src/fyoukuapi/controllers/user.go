@@ -50,13 +50,13 @@ func (this *UserController) UserLogin() {
 	}
 	param["password"] = Md5V(fmt.Sprint(param["password"]))
 
-	user, count, err := models.GetUserinfo(param)
+	userInfo, err := models.GetUserinfo(param)
 	if err != nil {
 		this.JsonResult(1, err.Error())
 	}
-	if count == 0 {
-		this.JsonResult(1, "账号或密码错误")
-	}
+	user := make(map[string]interface{})
+	user["id"] = userInfo.Id
+	user["username"] = userInfo.Name
 	this.JsonResult(0, "登录成功", user)
 }
 
@@ -81,4 +81,23 @@ func (this *UserController) UserSendMessage() {
 		this.JsonResult(1, err.Error())
 	}
 	this.JsonResult(0, "发送成功")
+}
+
+// 我的视频
+func (this *UserController) UserVideo() {
+	var uid int
+
+	uid, _ = this.GetInt("uid", 0)
+	if uid == 0 {
+		this.JsonResult(1, "用户不存在")
+	}
+	videoList, num, err := models.UserVideo(uid)
+	if err != nil {
+		this.JsonResult(1, err.Error())
+	}
+	if num == 0 {
+		this.JsonResult(1, "暂无视频")
+	}
+	this.JsonResult(0, "查询成功", videoList)
+
 }

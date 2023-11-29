@@ -171,7 +171,7 @@ func (this *UserController) UploadVideo() {
 	filename := strings.Split(header.Filename, ".")
 	filename[0] = utils.GetVideoName(uid)
 	//文件保存的位置
-	var fileDir = "/Users/zhja/goRoot/src/fyouku/static/video/" + filename[0] + "." + filename[1]
+	var fileDir = "./static/video/" + filename[0] + "." + filename[1]
 	//播放地址
 	var playUrl = "/static/video/" + filename[0] + "." + filename[1]
 	err = ioutil.WriteFile(fileDir, b, 0777)

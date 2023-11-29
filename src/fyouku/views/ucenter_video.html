@@ -166,7 +166,7 @@ $(function(){
     success: function(response) {
       console.log(response);
       if (response.code == 0) {
-      $.each(response.items,function(i,j){
+      $.each(response.data,function(i,j){
         var img1 = "/static/index/img/20200327172206.jpg";
         if(j.Img != ''){
           img1 = j.Img

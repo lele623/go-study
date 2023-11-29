@@ -8,13 +8,13 @@ import (
 )
 
 type User struct {
-	Id       int
-	Name     string
-	Password string
-	AddTime  int64
-	Status   int
-	Mobile   string
-	Avatar   string
+	Id       int    `json:"id"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
+	AddTime  int64  `json:"add_time"`
+	Status   int    `json:"status"`
+	Mobile   string `json:"mobile"`
+	Avatar   string `json:"avatar"`
 }
 
 // 状态
@@ -46,9 +46,9 @@ func UserSave(mobile string, password string) error {
 }
 
 // 获取用户信息
-func GetUserinfo(param map[string]interface{}) ([]User, int64, error) {
+func GetUserinfo(param map[string]interface{}) (User, error) {
 	var (
-		user []User
+		user User
 		args []interface{}
 	)
 
@@ -63,10 +63,21 @@ func GetUserinfo(param map[string]interface{}) ([]User, int64, error) {
 		args = append(args, param["password"])
 	}
 
-	count, err := orm.NewOrm().Raw(sql, args...).QueryRows(&user)
+	err := orm.NewOrm().Raw(sql, args...).QueryRow(&user)
 	if err != nil {
 		logs.Error(err)
-		return user, 0, errors.New("内部异常")
+		return user, errors.New("账号或密码错误")
 	}
-	return user, count, nil
+	return user, nil
+}
+
+// 用户视频
+func UserVideo(uid int) ([]Video, int64, error) {
+	var video []Video
+	num, err := orm.NewOrm().Raw("select * from video where user_id = ? order by add_time desc", uid).QueryRows(&video)
+	if err != nil {
+		logs.Error(err)
+		return video, 0, errors.New("内部异常")
+	}
+	return video, num, nil
 }
